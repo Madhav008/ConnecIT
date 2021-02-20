@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "408841426456",
+    "project_id": "connecit-c2ccf",
+    "storage_bucket": "connecit-c2ccf.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:408841426456:android:88819706b337a58012556d",
+        "android_client_info": {
+          "package_name": "com.madhav.connecit"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "408841426456-c0o3civmai2s1hv9ue1sef2v6ddrl5r8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD0UFx1ULvQRW4lGNNn-uyMRKAEqc8sX3Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "408841426456-c0o3civmai2s1hv9ue1sef2v6ddrl5r8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
