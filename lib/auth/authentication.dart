@@ -1,24 +1,42 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:loginDesign/auth/firestore.dart';
+import 'package:loginDesign/models/user.dart';
 
 class Auth {
+  FireStoreServices _firestoreService = FireStoreServices();
 
+  Future<User> signInWithGoogle() async {
+    final GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
 
-  
-  Future<FirebaseUser> signInWithGoogle() async {
-    final GoogleSignInAccount googleSignInAccount =
-        await GoogleSignIn().signIn();
-    final GoogleSignInAuthentication googleSignInAuthentication =
-        await googleSignInAccount.authentication;
+    // Obtain the auth details from the request
+    final GoogleSignInAuthentication googleAuth =
+        await googleUser.authentication;
 
-    final AuthCredential credential = GoogleAuthProvider.getCredential(
-      accessToken: googleSignInAuthentication.accessToken,
-      idToken: googleSignInAuthentication.idToken,
+    // Create a new credential
+    final GoogleAuthCredential credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
     );
 
-    final AuthResult authResult =
+    final UserCredential authResult =
         await FirebaseAuth.instance.signInWithCredential(credential);
-    final FirebaseUser user = authResult.user;
+
+    final User user = authResult.user;
+
+    var existingUser = await _firestoreService.fetchUser(user.uid);
+
+    var userData = Users(
+        userId: user.uid,
+        name: user.displayName,
+        username: user.displayName,
+        email: user.email,
+        isAdmin: false,
+        image: user.photoURL);
+        
+    if (existingUser == null) {
+      await _firestoreService.addUser(userData);
+    }
     return user;
   }
 }

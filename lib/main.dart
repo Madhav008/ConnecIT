@@ -1,17 +1,22 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:loginDesign/pages/home.dart';
 import 'auth/authentication.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
@@ -19,8 +24,8 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: FutureBuilder<FirebaseUser>(
-          future: FirebaseAuth.instance.currentUser(),
+      home: StreamBuilder<User>(
+          stream: FirebaseAuth.instance.authStateChanges(),
           builder: (context, snapshot) {
             return (snapshot.data != null)
                 ? SplashScreen(snapshot.data)
@@ -31,7 +36,7 @@ class MyApp extends StatelessWidget {
 }
 
 class SplashScreen extends StatelessWidget {
-  FirebaseUser data;
+  User data;
   SplashScreen(this.data);
   @override
   Widget build(BuildContext context) {
@@ -68,7 +73,7 @@ class Login extends StatelessWidget {
             child: RaisedButton(
           child: Text("Login With Google"),
           onPressed: () async {
-            FirebaseUser user = await Auth().signInWithGoogle();
+            User user = await Auth().signInWithGoogle();
 
             if (user != null) {
               Navigator.pushReplacement(
