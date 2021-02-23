@@ -45,7 +45,7 @@ class SplashScreen extends StatelessWidget {
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => HomePage(data),
+            builder: (context) => HomePage(user:data),
           ));
     });
     return Scaffold(
@@ -79,7 +79,7 @@ class Login extends StatelessWidget {
               Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => HomePage(user),
+                    builder: (context) => HomePage(user:user),
                   ));
             }
           },
