@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:loginDesign/pages/create_account.dart';
 import 'package:loginDesign/pages/home.dart';
+import 'package:loginDesign/provider/search_provider.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -14,24 +16,28 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.deepPurple,
-        accentColor: Colors.teal,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => SearchUser(),)
+      ],
+          child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          primarySwatch: Colors.deepPurple,
+          accentColor: Colors.teal,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+        ),
+        home: StreamBuilder<User>(
+            stream: FirebaseAuth.instance.authStateChanges(),
+            builder: (context, snapshot) {
+              return (snapshot.data != null)
+                  ? SplashScreen(snapshot.data)
+                  : Login();
+            }),
       ),
-      home: StreamBuilder<User>(
-          stream: FirebaseAuth.instance.authStateChanges(),
-          builder: (context, snapshot) {
-            return (snapshot.data != null)
-                ? SplashScreen(snapshot.data)
-                : Login();
-          }),
     );
   }
 }

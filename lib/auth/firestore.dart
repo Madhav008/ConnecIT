@@ -9,6 +9,9 @@ class FireStoreServices {
     return _db.collection('user').doc(user.userId).set(user.toMap());
   }
 
+  Future<Users> updateUser(Users user){
+    return _db.collection('user').doc(user.userId).update(user.toMap());
+  }
   Future<Users> fetchUser(String userId) {
     return _db
         .collection('user')
@@ -16,4 +19,7 @@ class FireStoreServices {
         .get()
         .then((value) => Users.fromFirestore(value.data()));
   }
+
+
+  
 }

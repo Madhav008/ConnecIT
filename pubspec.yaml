@@ -23,13 +23,16 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  cached_network_image: ^2.5.0
   cloud_firestore: ^0.14.1+3
   cupertino_icons: ^1.0.0
   dio: ^3.0.10
   firebase_auth: ^0.18.1+2
   firebase_core: null
+  flutter_svg: null
   google_fonts: ^1.1.2
   google_sign_in: ^4.5.5
+  image_picker: 
   onesignal_flutter: ^2.6.2
   provider: ^4.3.3
 
