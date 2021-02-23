@@ -6,7 +6,7 @@ import 'package:loginDesign/models/user.dart';
 class Auth {
   FireStoreServices _firestoreService = FireStoreServices();
 
-  Future<User> signInWithGoogle() async {
+  Future<User> signInWithGoogle(String uname) async {
     final GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
 
     // Obtain the auth details from the request
@@ -29,7 +29,7 @@ class Auth {
     var userData = Users(
         userId: user.uid,
         name: user.displayName,
-        username: user.displayName,
+        username: uname,
         email: user.email,
         isAdmin: false,
         image: user.photoURL);

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:loginDesign/widgets/header.dart';
+import 'package:loginDesign/widgets/progress.dart';
 
 class Timeline extends StatefulWidget {
   var user;
@@ -10,9 +12,9 @@ class Timeline extends StatefulWidget {
 class _TimelineState extends State<Timeline> {
   @override
   Widget build(context) {
-    return Container(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        child: Text('Search'));
+    return Scaffold(
+      appBar: buildAppBar(context,isAppTitle: true),
+      body: linearProgress() ,
+    );
   }
 }

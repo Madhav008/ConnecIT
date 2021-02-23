@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:loginDesign/widgets/header.dart';
 
 class Profile extends StatefulWidget {
   @override
@@ -8,9 +10,9 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        child: Text('Profile'));
+    return Scaffold(
+      appBar: buildAppBar(context, titleText: "Profile"),
+      body: Center(child: RaisedButton(onPressed:  () => FirebaseAuth.instance.signOut())),
+    );
   }
 }

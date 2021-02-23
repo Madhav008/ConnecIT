@@ -13,7 +13,7 @@ class _ActivityFeedState extends State<ActivityFeed> {
     return Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
-        child: Text('Activity Feed'));;
+        child: Text('Activity Feed'));
   }
 }
 
