@@ -59,7 +59,7 @@ class _HomePageState extends State<HomePage> {
             ActivityFeed(),
             Search(),
             Profile(),
-            Upload(),
+            Upload(currentUser: widget.user,),
           ],
           controller: pageController,
           physics: NeverScrollableScrollPhysics(),

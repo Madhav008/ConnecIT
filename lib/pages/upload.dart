@@ -8,14 +8,14 @@ import 'package:flutter_svg/svg.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:loginDesign/models/user.dart';
 import 'package:loginDesign/widgets/progress.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:image/image.dart' as Im;
 import 'package:uuid/uuid.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class Upload extends StatefulWidget {
-  final Users currentUser;
+   User currentUser;
 
   Upload({this.currentUser});
 
@@ -36,21 +36,21 @@ class _UploadState extends State<Upload>
 
   handleTakePhoto() async {
     Navigator.pop(context);
-    File file = await ImagePicker.pickImage(
+    var file = await ImagePicker().getImage(
       source: ImageSource.camera,
       maxHeight: 675,
       maxWidth: 960,
     );
     setState(() {
-      this.file = file;
+      this.file = File(file.path);
     });
   }
 
   handleChooseFromGallery() async {
     Navigator.pop(context);
-    File file = await ImagePicker.pickImage(source: ImageSource.gallery);
+    var file = await ImagePicker().getImage(source: ImageSource.gallery);
     setState(() {
-      this.file = file;
+      this.file = File(file.path);
     });
   }
 
@@ -125,21 +125,22 @@ class _UploadState extends State<Upload>
     var uploadTask =
         storageRef.ref().child("post_$postId.jpg").putFile(imageFile);
 
-    var downloadUrl = await uploadTask.storage.ref().getDownloadURL();
+    var downloadUrl = await storageRef.ref().child("post_$postId").getDownloadURL();
+    // var downloadUrl ="photoURL";
     return downloadUrl;
   }
 
   createPostInFirestore(
       {String mediaUrl, String location, String description}) {
-    postsRef
-        .doc(widget.currentUser.userId)
+    postsRef.collection('user')
+        .doc(widget.currentUser.uid)
         .collection("userPosts")
         .doc(postId)
         .set({
       "postId": postId,
-      "ownerId": widget.currentUser.userId,
-      "username": widget.currentUser.username,
-      "mediaUrl": mediaUrl,
+      "ownerId": widget.currentUser.uid,
+      "username": widget.currentUser.displayName,
+      // "mediaUrl": mediaUrl,
       "description": description,
       "location": location,
       "timestamp": Timestamp.now(),
@@ -218,7 +219,7 @@ class _UploadState extends State<Upload>
           ListTile(
             leading: CircleAvatar(
               backgroundImage:
-                  CachedNetworkImageProvider(widget.currentUser.image),
+                  CachedNetworkImageProvider(widget.currentUser.photoURL),
             ),
             title: Container(
               width: 250.0,
@@ -262,7 +263,7 @@ class _UploadState extends State<Upload>
                 borderRadius: BorderRadius.circular(30.0),
               ),
               color: Colors.blue,
-              onPressed: null,
+              onPressed: getUserLocation,
               icon: Icon(
                 Icons.my_location,
                 color: Colors.white,

@@ -1,10 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:loginDesign/auth/firestore.dart';
 import 'package:loginDesign/models/user.dart';
 import 'package:loginDesign/provider/search_provider.dart';
-import 'package:loginDesign/widgets/progress.dart';
 import 'package:provider/provider.dart';
 
 class Search extends StatefulWidget {
