@@ -5,9 +5,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:geocoder/geocoder.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:loginDesign/auth/upload_services.dart';
 import 'package:loginDesign/widgets/progress.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:image/image.dart' as Im;
@@ -15,7 +14,7 @@ import 'package:uuid/uuid.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class Upload extends StatefulWidget {
-   User currentUser;
+  User currentUser;
 
   Upload({this.currentUser});
 
@@ -122,30 +121,10 @@ class _UploadState extends State<Upload>
   }
 
   Future<String> uploadImage(imageFile) async {
-    var uploadTask =
-        storageRef.ref().child("post_$postId.jpg").putFile(imageFile);
-
-    var downloadUrl = await storageRef.ref().child("post_$postId").getDownloadURL();
-    // var downloadUrl ="photoURL";
+    var uploadTask = storageRef.ref("post_$postId.jpg").putFile(imageFile);
+    var storageSnap = await uploadTask;
+    String downloadUrl = await storageSnap.ref.getDownloadURL();
     return downloadUrl;
-  }
-
-  createPostInFirestore(
-      {String mediaUrl, String location, String description}) {
-    postsRef.collection('user')
-        .doc(widget.currentUser.uid)
-        .collection("userPosts")
-        .doc(postId)
-        .set({
-      "postId": postId,
-      "ownerId": widget.currentUser.uid,
-      "username": widget.currentUser.displayName,
-      // "mediaUrl": mediaUrl,
-      "description": description,
-      "location": location,
-      "timestamp": Timestamp.now(),
-      "likes": {},
-    });
   }
 
   handleSubmit() async {
@@ -154,7 +133,8 @@ class _UploadState extends State<Upload>
     });
     await compressImage();
     String mediaUrl = await uploadImage(file);
-    createPostInFirestore(
+    UploadService().createPostInFirestore(
+      uid: widget.currentUser.uid,
       mediaUrl: mediaUrl,
       location: locationController.text,
       description: captionController.text,
@@ -164,7 +144,6 @@ class _UploadState extends State<Upload>
     setState(() {
       file = null;
       isUploading = false;
-      postId = Uuid().v4();
     });
   }
 
@@ -181,7 +160,7 @@ class _UploadState extends State<Upload>
         ),
         actions: [
           FlatButton(
-            onPressed: isUploading ? null : () => handleSubmit(),
+            onPressed: () => handleSubmit(),
             child: Text(
               "Post",
               style: TextStyle(
@@ -242,6 +221,7 @@ class _UploadState extends State<Upload>
             title: Container(
               width: 250.0,
               child: TextField(
+                
                 controller: locationController,
                 decoration: InputDecoration(
                   hintText: "Where was this photo taken?",
@@ -263,7 +243,9 @@ class _UploadState extends State<Upload>
                 borderRadius: BorderRadius.circular(30.0),
               ),
               color: Colors.blue,
-              onPressed: getUserLocation,
+              onPressed: () async{
+                locationController.text =await UploadService().getUserLocation();
+              },
               icon: Icon(
                 Icons.my_location,
                 color: Colors.white,
@@ -275,15 +257,7 @@ class _UploadState extends State<Upload>
     );
   }
 
-  getUserLocation() async {
-    Position position = await Geolocator
-        .getCurrentPosition(desiredAccuracy: LocationAccuracy.medium);
-    var coordinates =  Coordinates(position.latitude, position.longitude);
-    var addresses = await Geocoder.local.findAddressesFromCoordinates(coordinates);
-
-      print(addresses);
-  }
-
+ 
   bool get wantKeepAlive => true;
 
   @override
