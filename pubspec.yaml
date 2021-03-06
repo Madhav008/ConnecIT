@@ -30,7 +30,7 @@ dependencies:
   firebase_auth: ^0.20.1
   firebase_core: ^0.7.0
   firebase_storage: ^7.0.0
-  flutter_svg: null
+  flutter_svg: ^0.19.3
   geocoder: ^0.2.1
   geolocator: null
   google_fonts: ^1.1.2

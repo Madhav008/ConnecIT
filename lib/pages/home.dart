@@ -58,7 +58,7 @@ class _HomePageState extends State<HomePage> {
             Timeline(widget.user),
             ActivityFeed(),
             Search(),
-            Profile(),
+            Profile(profileId: widget.user.uid,),
             Upload(currentUser: widget.user,),
           ],
           controller: pageController,
@@ -104,8 +104,3 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-// Scaffold(
-//             backgroundColor: Color(0xffF5F5F5),
-
-//
-// ),

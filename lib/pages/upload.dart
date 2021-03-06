@@ -159,7 +159,7 @@ class _UploadState extends State<Upload>
           style: TextStyle(color: Colors.black),
         ),
         actions: [
-          FlatButton(
+          TextButton(
             onPressed: () => handleSubmit(),
             child: Text(
               "Post",

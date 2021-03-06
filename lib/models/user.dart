@@ -3,6 +3,7 @@ class Users {
   final String email;
   final String username;
   final String name;
+  final String bio;
   final String image;
   final bool isAdmin;
 
@@ -11,6 +12,7 @@ class Users {
       this.name,
       this.image,
       this.email,
+      this.bio,
       this.userId,
       this.isAdmin});
 
@@ -19,8 +21,9 @@ class Users {
       'userId': userId,
       'username': username,
       'name': name,
+      'bio':bio,
       'image': image,
-      'email': email,
+      'email': email, 
       'isAdmin': isAdmin,
     };
   }
@@ -33,6 +36,7 @@ class Users {
         userId: firestore['userId'],
         username: firestore['username'],
         name: firestore['name'],
+        bio: firestore['bio'],
         image: firestore['image'],
         isAdmin: firestore['isAdmin']); 
   }

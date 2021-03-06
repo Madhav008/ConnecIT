@@ -14,6 +14,7 @@ class UploadService {
       String mediaUrl,
       String location,
       String description}) {
+
     FireStoreServices().fetchUser(uid).then((value) {
       username = value.username;
     });
