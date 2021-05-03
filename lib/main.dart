@@ -6,8 +6,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:loginDesign/pages/create_account.dart';
 import 'package:loginDesign/pages/home.dart';
 import 'package:loginDesign/provider/search_provider.dart';
-import 'package:onesignal_flutter/onesignal_flutter.dart';
+// import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
+
+import 'models/homeviewmodel.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,9 +22,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => SearchUser(),)
+        ChangeNotifierProvider.value(
+          value: HomeViewModel(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => SearchUser(),
+        )
       ],
-          child: MaterialApp(
+      child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
         theme: ThemeData(
@@ -51,12 +58,10 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-
-
   @override
   Widget build(BuildContext context) {
     Future.delayed(Duration(seconds: 5), () {
-      OneSignal.shared.init("c0069866-c963-42d5-9cda-f05f59b99886");
+      // OneSignal.shared.init("c0069866-c963-42d5-9cda-f05f59b99886");
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
@@ -84,7 +89,6 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
- 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -136,3 +140,32 @@ class _LoginState extends State<Login> {
     );
   }
 }
+
+// import 'dart:async';
+
+// import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
+// import 'package:flutter/material.dart';
+// import 'package:flutter/services.dart';
+
+// void main() {
+//   runApp(MaterialApp(
+//     title: 'Dynamic Links Example',
+//     routes: <String, WidgetBuilder>{
+//       '/': (BuildContext context) => _MainScreen(),
+//       '/helloworld': (BuildContext context) => _DynamicLinkScreen(),
+//     },
+//   ));
+// }
+
+// class _MainScreen extends StatefulWidget {
+//   @override
+//   State<StatefulWidget> createState() => _MainScreenState();
+// }
+
+// class _MainScreenState extends State<_MainScreen> {
+
+//   @override
+//   void initState() {
+//     super.initState();
+//     initDynamicLinks();
+//   }

@@ -8,7 +8,7 @@ class SearchUser with ChangeNotifier {
   List<Users> get searchUser => _searchUsers;
 
   void resetStreams() {
-    _searchUsers = List<Users>();
+    _searchUsers = <Users>[];
     _searchUsers.length = 0;
   }
 
@@ -18,16 +18,12 @@ class SearchUser with ChangeNotifier {
         .collection('user')
         .where("username", isGreaterThanOrEqualTo: query)
         .get();
-    print(userData.docs.length);
 
     userData.docs.forEach((user) {
       //convert it from json
       final resultUser = Users.fromFirestore(user.data());
-      print(resultUser);
 
       _searchUsers.add(resultUser);
-
-      print(_searchUsers[0].name);
     });
 
     notifyListeners();

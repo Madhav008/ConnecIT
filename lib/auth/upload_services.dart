@@ -19,7 +19,6 @@ class UploadService {
       username = value.username;
     });
     var postId = Uuid().v4();
-    var likes = Likes(number: "1", userId: uid);
     var post = Posts(
         postId: postId,
         ownerId: uid,
@@ -27,7 +26,7 @@ class UploadService {
         username: username,
         mediaUrl: mediaUrl,
         location: location,
-        likes: likes);
+        likes: 1);
 
     _db
         .collection('user')

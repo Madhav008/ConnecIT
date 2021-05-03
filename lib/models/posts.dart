@@ -8,7 +8,7 @@ class Posts {
   String description;
   String location;
   Timestamp timestamp;
-  Likes likes;
+  dynamic likes;
 
   Posts(
       {this.postId,
@@ -28,7 +28,7 @@ class Posts {
       "description": description,
       "location": location,
       "timestamp": Timestamp.now(),
-      // "likes": Likes.toMap(li),
+      "likes": getLikeCount(likes),
     };
   }
 
@@ -42,26 +42,21 @@ class Posts {
         mediaUrl: firestore['mediaUrl'],
         description: firestore['description'],
         location: firestore['location'],
-        likes: Likes.fromFirestore(firestore['likes']));
+        likes: firestore['likes']);
   }
+
 }
-
-class Likes {
-  String number;
-  String userId;
-
-  Likes({this.number, this.userId});
-
-  Map<String, dynamic> toMap() {
-    return {"number": number, "userId": userId};
+  int getLikeCount(likes) {
+    // if no likes, return 0
+    if (likes == null) {
+      return 0;
+    }
+    int count = 0;
+    // if the key is explicitly set to true, add a like
+    likes.value.forEach((val) {
+      if (val == true) {
+        count += 1;
+      }
+    });
+    return count;
   }
-
-  factory Likes.fromFirestore(Map<String, dynamic> firestore) {
-    if (firestore == null) return null;
-
-    return Likes(
-      number: firestore['number'],
-      userId: firestore['userId'],
-    );
-  }
-}

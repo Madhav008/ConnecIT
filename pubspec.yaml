@@ -29,6 +29,7 @@ dependencies:
   dio: ^3.0.10
   firebase_auth: ^0.20.1
   firebase_core: ^0.7.0
+  firebase_dynamic_links: null
   firebase_storage: ^7.0.0
   flutter_svg: ^0.19.3
   geocoder: ^0.2.1
@@ -36,8 +37,10 @@ dependencies:
   google_fonts: ^1.1.2
   google_sign_in: ^4.5.5
   image_picker: null
-  onesignal_flutter: ^2.6.2
+  # onesignal_flutter: ^2.6.2
   provider: ^4.3.3
+  share: ^0.6.2+3
+  url_launcher: ^6.0.3
 
 dev_dependencies:
   flutter_test:

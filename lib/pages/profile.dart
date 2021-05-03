@@ -2,9 +2,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:loginDesign/auth/firestore.dart';
+import 'package:loginDesign/models/posts.dart';
 import 'package:loginDesign/models/user.dart';
 import 'package:loginDesign/pages/edit_profile.dart';
 import 'package:loginDesign/widgets/header.dart';
+import 'package:loginDesign/widgets/post.dart';
 import 'package:loginDesign/widgets/progress.dart';
 
 class Profile extends StatefulWidget {
@@ -15,8 +17,31 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-  
   User user = FirebaseAuth.instance.currentUser;
+  bool isLoading = false;
+  int postCount = 0;
+  List<Post> posts = [];
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+//  getProfilePosts() async {
+//     setState(() {
+//       isLoading = true;
+//     });
+//     QuerySnapshot snapshot = await FirebaseFirestore.instance.collection('user')
+//         .doc(widget.profileId)
+//         .collection('userPosts')
+//         .orderBy('timestamp', descending: true)
+//         .get();
+//     setState(() {
+//       isLoading = false;
+//       postCount = snapshot.docChanges.length;
+//       posts = snapshot.docChanges.map((doc) => Post.fromDocument(doc.doc)).toList();
+//     });
+//   }
 
   Column buildCountColumn(String label, int count) {
     return Column(
@@ -46,7 +71,9 @@ class _ProfileState extends State<Profile> {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => EditProfile(currentUserId:user.uid ,)));
+            builder: (context) => EditProfile(
+                  currentUserId: user.uid,
+                )));
   }
 
   Container buildButton({String text, Function function}) {
@@ -86,7 +113,6 @@ class _ProfileState extends State<Profile> {
   }
 
   buildProfileHeader() {
-
     return FutureBuilder<Users>(
       future: FireStoreServices().fetchUser(widget.profileId),
       builder: (context, snapshot) {
@@ -164,14 +190,45 @@ class _ProfileState extends State<Profile> {
     );
   }
 
+  buildProfilePosts() {
+    if (isLoading) {
+      return circularProgress();
+    }
+    return Column(
+      children: posts,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: buildAppBar(context, titleText: "Profile"),
-      body: ListView(
-        children: <Widget>[buildProfileHeader()],
+      body: Column(
+        children: <Widget>[
+          buildProfileHeader(),
+          Divider(
+            height: 0.0,
+          ),
+          FutureBuilder<List<Posts>>(
+            future: FireStoreServices().fetchPosts(widget.profileId),
+            builder: (context, snapshot) {
+              if (snapshot.hasData &&
+                  snapshot.connectionState == ConnectionState.done) {
+                return Expanded(
+                  child: Container(
+                    child: ListView.builder(
+                      itemCount: snapshot.data.length,
+                      itemBuilder: (context, index) {
+                        return(snapshot.data[index].mediaUrl!=null) ?CachedNetworkImage(imageUrl:  snapshot.data[index].mediaUrl,):Padding(padding: EdgeInsets.all(10));
+                      },
+                    ),
+                  ),
+                );
+              }
+            },
+          )
+        ],
       ),
     );
   }
 }
-
